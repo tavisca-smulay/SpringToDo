@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="index-styles.css">
+  </head>
+  <body>
+    <script type="text/javascript" src="script.js"></script>
+    <div class="grid-container">
+      <div class="item1">
+        <h1>To Do List</h1>
+      </div>
+      <div class="item2">
+        <ul class="list">
+          <li class="list-item" onclick="changeTab(event,'toDoTab')" id="defaultOpen"><img src="pushpin-icon.png">&nbsp;To Do</li>
+          <li class="list-item" onclick="changeTab(event,'yourProfileTab')"><img src="pushpin-icon.png">&nbsp;Your Profile</li>
+          <li class="list-item" onclick="changeTab(event,'calendarTab')"><img src="pushpin-icon.png">&nbsp;Calendar</li>
+          <li class="list-item" onclick="changeTab(event,'importantTab')"><img src="pushpin-icon.png">&nbsp;Important</li>
+          <li class="list-item" onclick="changeTab(event,'settingsTab')"><img src="pushpin-icon.png">&nbsp;Settings</li>
+        </ul>
+      </div>
+
+
+      <div class="item3 tabcontent" id="toDoTab">
+        <input type="text" class="search-bar" id="search-bar-id" placeholder="Search" title="Search">
+        <button class="add-button" onclick="addItem()">Add Task</button>
+        <button class="search-button" onclick="searchItem()">Search</button>
+        <center>
+          <table id="task-table"></table>
+        </center>
+      </div>
+      
+
+      <div id="yourProfileTab" class="tabcontent">
+        <center>
+        <h2>Nothing to display!</h2>
+        </center>
+      </div>
+      <div id="calendarTab" class="tabcontent">
+        <center>
+        <h2>Nothing to display!</h2>
+        </center>
+      </div>
+      <div id="importantTab" class="tabcontent">
+        <center>
+        <h2>Nothing to display!</h2>
+        </center>
+      </div>
+      <div id="settingsTab" class="tabcontent">
+        <center>
+        <h2>Nothing to display!</h2>
+        </center>
+      </div>
+      <div class="item4"><h3>"--Created By Shivani Mulay--"</h3></div>
+    </div>
+    <script>
+      document.getElementById("defaultOpen").click();
+</script>
+  </body>
+</html>
