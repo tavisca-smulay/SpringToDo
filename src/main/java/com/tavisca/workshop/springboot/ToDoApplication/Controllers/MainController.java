@@ -3,7 +3,9 @@ package com.tavisca.workshop.springboot.ToDoApplication.Controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tavisca.workshop.springboot.ToDoApplication.DataPersistService;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class MainController {
+	@Autowired
+	DataPersistService dataPersistService;
+
     private List<String> tasks = new ArrayList<String>() {
         {
             add("Java");
@@ -21,8 +26,9 @@ public class MainController {
 
     @GetMapping(path = "/api/v1/getAllTasks")
     public ResponseEntity<?> getAllTasks() {
+    	List<String> list = dataPersistService.getAllTasks();
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("taskList", tasks);
+        jsonObject.put("taskList", list);
         return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);
     }
 
@@ -34,12 +40,13 @@ public class MainController {
     }
 
     @GetMapping(path = "/api/v1/searchTask/{taskName}")
-	public ResponseEntity<?> search(@PathVariable("taskName") String name)
+	public ResponseEntity<?> searchTask(@PathVariable("taskName") String taskName)
 	{
+		List<String> list = dataPersistService.getAllTasks();
 		JSONObject jsonObject = new JSONObject();
-		if(tasks.contains(name))
+		if(list.contains(taskName))
 		{
-			jsonObject.put("taskList",name);
+			jsonObject.put("taskList",taskName);
 			return new ResponseEntity<>(jsonObject.toString(),HttpStatus.OK);
 		}
 		jsonObject.put("taskList","No entries found!!");
@@ -50,22 +57,22 @@ public class MainController {
 	public ResponseEntity<?> addTask(@RequestBody String entry)
 	{
 		JSONObject jsonObject = new JSONObject(entry);
-		tasks.add(jsonObject.getString("taskList"));
+		dataPersistService.addEntry(jsonObject.getString("taskList"));
 		return getAllTasks();
 	}
 
-    @PutMapping(path = "/api/v1/editTask/{id}")
-	public ResponseEntity<?> editTask(@RequestBody String name,@PathVariable("id") int index)
+    @PutMapping(path = "/api/v1/editTask/{data}")
+	public ResponseEntity<?> editTask(@RequestBody String oldTask,@PathVariable("data") String newTask)
 	{
-		JSONObject jsonObject = new JSONObject(name);
-		tasks.set(index,jsonObject.getString("taskList"));
+		JSONObject jsonObject = new JSONObject(oldTask);
+		dataPersistService.updateEntry(jsonObject.getString("taskList"),newTask);
 		return getAllTasks();
 	}
 
-    @DeleteMapping(path = "/api/v1/deleteTask/{id}")
-	public ResponseEntity<?> deleteTask(@PathVariable("id") int index)
+    @DeleteMapping(path = "/api/v1/deleteTask/{data}")
+	public ResponseEntity<?> deleteTask(@PathVariable("data") String data)
 	{
-		tasks.remove(index);
+		dataPersistService.deleteEntry(data);
 		return getAllTasks();
 	}
 }
